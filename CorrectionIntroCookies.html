@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Exo 1 : gestion des cookies</title>
+    <style>
+        #welcome {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<p id="welcome"></p>
+<form action="#" method="GET">
+    <label for="prenom">Prénom : <input type="text" name="prenom" id="prenom"></label><br>
+    <input type="submit" value="Enregistrer le prénom">
+    <button>Clear cookie</button>
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        const input = document.querySelector("input[type='text']");
+        const submitBtn = document.querySelector("input[type='submit']");
+        const welcomeP = document.querySelector("#welcome");
+        const clrBtn = document.querySelector("button");
+
+        // On empêche le fonctionnement par défaut de l'événement "submit" du formulaire pour que ce dernier ne soit pas soumis au click sur le bouton
+        form.addEventListener("submit", (evt) => {
+            evt.preventDefault();
+
+
+        });
+
+        submitBtn.addEventListener("click", function (evt) {
+            // A la soumission du formulaire, on veut récupérer le contenu de l'input afin de créer un cookie
+            console.log(input.value);
+            document.cookie = `prenom=${input.value};max-age=${7 * 24 * 60 * 60}`;
+
+            displayWelcomeMsg();
+        });
+
+
+        // On ajoute un listener sur l'event click du bouton de suppression du cookie
+        clrBtn.addEventListener("click", function () {
+            document.cookie = `prenom=${input.value};max-age=0`;
+            displayWelcomeMsg();
+        });
+
+
+        // On aurait aussi pu mettre la création du cookie sur l'event "click" de notre bouton
+        // submitBtn.addEventListener("click", function (evt) {
+        // });
+
+        // Au chargement, verifier si le cookie  existe, si oui afficher un message
+        displayWelcomeMsg();
+
+        function displayWelcomeMsg() {
+            let prenom = getCookie("prenom");
+            if (prenom !== "" && prenom !== null && prenom !== undefined) {
+                welcomeP.innerHTML = `Bonjour ${prenom}, bienvenue sur notre merveilleux site aux multiples fonctionnalités.`;
+                welcomeP.style.display = "block";
+            } else {
+                welcomeP.innerHTML = "";
+                welcomeP.style.display = "none";
+            }
+        }
+    });
+
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+</script>
+
+</body>
+</html>

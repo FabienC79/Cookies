@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<h1>Introduction aux Cookies</h1>
+<h2>Exercice 1</h2>
+<h3>Objectif:</h3>
+<p>Créer, lire, modifier et supprimer des cookies en JavaScript.</p>
+<h3>Consigne:</h3>
+<p>1. Créez une page HTML smple avec un formulaire demandant le prénom de l'utilisateur<br>
+2. Lorsque l'utilisateur soumet le formulaire, interceptez l'événement (listener sur le form) et empéchez son submit. Vous enregistrerez, en JavaScript, son prénom dans un cookie qui expirera dans 7 jours (ajouter un segment ";max-age=<$max-age-in-seconds>")<br>
+3. Afficher un message de bienvenue utilisant le prénom de l'utilisateur s'il éxiste déja dans un cookie.<br>
+4. Ajoutez un bouton permettant de supprimer le cookie du prénom (définir max-age à 0)<br></p>
+
+<h2>----------------------------------------------------------------------------</h2>
+<p id="bienvenue"></p>
+
+<form action="#" method="post">
+    <label for="prenom">Veuillez entrez votre prénom </label>
+    <input type="text" id="prenom" name="prenom">
+    <button type="submit" id="envoiForm">Envoyer</button>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const btnSend = document.querySelector('#envoiForm');
+        const formulaire = document.querySelector('form');
+        const inputDis = document.querySelector('input');
+        const mesBienv = document.querySelector('#bienvenue');
+
+
+        formulaire.addEventListener('submit', function (event) {
+            event.preventDefault();
+        });
+
+        btnSend.addEventListener('click', function (event) {
+            console.log(inputDis.value);
+            document.cookie = "prenom=" + inputDis.value + ";max-age=" + (7 * 24 * 60 * 60);
+        });
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) {
+                return parts.pop().split(';').shift();
+            }
+        }
+
+        let prenomCookie = getCookie("prenom=");
+        console.log(prenomCookie);
+
+
+        function displayBvn() {
+            if (document.cookie === undefined) {
+                alert("Entrez un prénom dans le formulaire");
+            } else {
+                mesBienv.textContent = `Bienvenue ${prenomCookie}`;
+            }
+        }
+
+        let bienv = displayBvn();
+        console.log(bienv);
+    });
+
+
+
+
+
+</script>
+
+
+</body>
+</html>
